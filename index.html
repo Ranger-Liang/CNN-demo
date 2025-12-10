@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CNN demo</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style.css">
     <script src="main.js"></script>
 </head>
 
@@ -16,11 +16,11 @@
     
     <div class="control_panel">
         <div class="controller">
-            <label>Input Size</label>
+            <label>Input Size: </label>
             <input type="number" id="input_size" value="7" min="3" max="10">
         </div>
         <div class="controller">
-            <label>Kernel Size</label>
+            <label>Kernel Size: </label>
             <select id="kernel_size">
                 <option value="1">1 × 1</option>
                 <option value="3" selected>3 × 3</option>
@@ -29,14 +29,14 @@
             </select>
         </div>
         <div>
-            <label>Padding</label>
+            <label>Padding: </label>
             <input type="number" id="conf-padding" value="1" min="0" max="5">
         </div>
         <div class="controller">
-            <label>Stride</label>
+            <label>Stride: </label>
             <input type="number" id="conf-stride" value="2" min="1" max="5">
         </div>
-        <button class="btn-primary" onclick="init()">Apply</button>     
+        <button class="control_button" id="apply" onclick="init()">Apply</button>     
     </div>
     
     <div class="container">

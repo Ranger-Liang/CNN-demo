@@ -1,0 +1,86 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    color: black;
+    font-size: 20px;
+}
+
+.control_panel {
+    background: rgb(203, 203, 203);
+    padding: 15px 25px;
+    border-radius: 8px;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+select, input, button {
+    padding: 5px;
+    border-radius: 4px;
+    width: 80px;
+}
+
+#apply{
+    background-color: rgb(66, 66, 237);
+    color: white;
+}
+
+.container {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.info{
+    font-size: 16px;
+}
+
+
+#play{
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#play_control{
+    margin-top: 10px;
+    gap: 30px;
+}
+
+#display{
+    background: rgb(242, 242, 242);
+    border: 1px solid rgba(99, 99, 99, 0.51);
+    width: 80vw;
+    min-height: 50px;
+    font-size: 16px;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px;
+}
+
+#step{
+    background-color: sandybrown;
+}
+
+#auto{
+    background-color: lime;
+}
+
+#reset{
+    background-color: tomato;
+}
