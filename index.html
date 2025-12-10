@@ -6,3 +6,76 @@
     <title>CNN demo</title>
     <link rel="stylesheet" href="styles.css">
     <script src="main.js"></script>
+</head>
+
+<body>
+    
+    <h1>
+        CNN Demo
+    </h1>
+    
+    <div class="control_panel">
+        <div class="controller">
+            <label>Input Size</label>
+            <input type="number" id="input_size" value="7" min="3" max="10">
+        </div>
+        <div class="controller">
+            <label>Kernel Size</label>
+            <select id="kernel_size">
+                <option value="1">1 × 1</option>
+                <option value="3" selected>3 × 3</option>
+                <option value="5">5 × 5</option>
+                <option value="7">7 × 7</option>
+            </select>
+        </div>
+        <div>
+            <label>Padding</label>
+            <input type="number" id="conf-padding" value="1" min="0" max="5">
+        </div>
+        <div class="controller">
+            <label>Stride</label>
+            <input type="number" id="conf-stride" value="2" min="1" max="5">
+        </div>
+        <button class="btn-primary" onclick="init()">Apply</button>     
+    </div>
+    
+    <div class="container">
+
+        <!--Input-->
+        <div class="wrapper">
+            <div class="title">Input + Padding</div>
+            <div class="info" id="info_input">Size: ?</div>
+            <div class="grid" id="grid_input"></div>
+        </div>
+
+        <div class="symbol">✖</div>
+
+        <!--Kernel-->
+        <div class="wrapper">
+            <div class="title">Kernel</div>
+            <div class="info" id="info_kernel">Size: ?</div>
+            <div class="grid" id="grid_kernel"></div>
+        </div>
+
+        <div class="symbol">=</div>
+
+        <!--Output-->
+        <div class="wrapper">
+            <div class="title">Output</div>
+            <div class="info" id="info_output">Size: ?</div>
+            <div class="grid" id="grid_output"></div>
+        </div>
+    </div>
+
+    <div id="play">
+        <div id="display">Click on 'Step' or 'Auto Play' to start the calculation ...</div>
+        <div id="play_control">
+            <button class="control_button" id="step"  onclick="next_step()">Step</button>
+            <button class="control_button" id="auto" onclick="auto_play()">Auto Play</button>
+            <button class="control_button" id="reset">Reset</button>
+        </div>
+    </div>
+
+
+
+</body>
