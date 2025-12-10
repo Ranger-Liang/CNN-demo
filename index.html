@@ -30,11 +30,11 @@
         </div>
         <div>
             <label>Padding: </label>
-            <input type="number" id="conf-padding" value="1" min="0" max="5">
+            <input type="number" id="padding" value="1" min="0" max="5">
         </div>
         <div class="controller">
             <label>Stride: </label>
-            <input type="number" id="conf-stride" value="2" min="1" max="5">
+            <input type="number" id="stride" value="2" min="1" max="5">
         </div>
         <button class="control_button" id="apply" onclick="init()">Apply</button>     
     </div>
@@ -48,7 +48,7 @@
             <div class="grid" id="grid_input"></div>
         </div>
 
-        <div class="symbol">✖</div>
+        <div class="symbol">×</div>
 
         <!--Kernel-->
         <div class="wrapper">
@@ -68,9 +68,9 @@
     </div>
 
     <div id="play">
-        <div id="display">Click on 'Step' or 'Auto Play' to start the calculation ...</div>
+        <div id="display">Please set parameters and click Apply to start. o(￣▽￣)d</div>
         <div id="play_control">
-            <button class="control_button" id="step"  onclick="next_step()">Step</button>
+            <button class="control_button" id="step"  onclick="next_step()">Next Step</button>
             <button class="control_button" id="auto" onclick="auto_play()">Auto Play</button>
             <button class="control_button" id="reset">Reset</button>
         </div>

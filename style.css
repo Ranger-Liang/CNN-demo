@@ -24,7 +24,7 @@ select, input, button {
 }
 
 #apply{
-    background-color: rgb(66, 66, 237);
+    background-color: rgba(66, 66, 237, 0.576);
     color: white;
 }
 
@@ -63,7 +63,7 @@ select, input, button {
 #display{
     background: rgb(242, 242, 242);
     border: 1px solid rgba(99, 99, 99, 0.51);
-    width: 80vw;
+    width: 60vw;
     min-height: 50px;
     font-size: 16px;
     border-radius: 4px;
@@ -74,13 +74,53 @@ select, input, button {
 }
 
 #step{
-    background-color: sandybrown;
+    background-color: rgba(255, 143, 73, 0.785);
 }
 
 #auto{
-    background-color: lime;
+    background-color: rgba(0, 255, 0, 0.729);
 }
 
 #reset{
-    background-color: tomato;
+    background-color: rgba(255, 99, 71, 0.672);
+}
+
+
+.grid{
+    display: grid;
+    gap: 2px;
+}
+
+.cell {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+}
+
+.cell.input_cell{
+    background-color: rgba(125, 189, 226, 0.659);
+}
+
+.cell.padding_cell{
+    background-color: rgba(205, 205, 205, 0.675);
+    color: white;
+}
+
+.cell.kernel_cell{
+    background-color: rgba(255, 228, 196, 0.695);
+}
+
+.cell.output_cell{
+    background-color: rgba(171, 253, 226, 0.711);
+}
+
+.symbol{
+    align-self: center;
+}
+
+.highlight{
+    background-color: rgba(178, 178, 79, 0.699) !important;
 }
