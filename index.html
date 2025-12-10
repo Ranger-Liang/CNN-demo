@@ -6,6 +6,15 @@
     <title>CNN demo</title>
     <link rel="stylesheet" href="style.css">
     <script src="main.js"></script>
+    <!--    
+    作品概念：CNN动态展示
+    知识点： 抽象化、模块化、分治范式
+    创新点：直观呈现数学运算
+    关于AI：
+            本作品在编程阶段几乎未使用任何AIGC（除了vscode内置的Copilot偶尔会给我自动补全代码）
+            但是在开始之前，我通过指导Gemini-3.0-pro完成了另一个作品https://ranger-liang.github.io/Dynamic-Demonstrate-of-Transformer/，
+            本作品的代码架构和部分细节设计参考了该作品（对该作品的深入分析和学习是我网页制作知识的主要来源。）
+    -->       
 </head>
 
 <body>
@@ -34,7 +43,7 @@
         </div>
         <div class="controller">
             <label>Stride: </label>
-            <input type="number" id="stride" value="2" min="1" max="5">
+            <input type="number" id="stride" value="1" min="1" max="5">
         </div>
         <button class="control_button" id="apply" onclick="init()">Apply</button>     
     </div>
@@ -72,10 +81,12 @@
         <div id="play_control">
             <button class="control_button" id="step"  onclick="next_step()">Next Step</button>
             <button class="control_button" id="auto" onclick="auto_play()">Auto Play</button>
-            <button class="control_button" id="reset">Reset</button>
+            <button class="control_button" id="reset" onclick="init()">Reset</button>
         </div>
     </div>
-
-
-
+    
+    <footer>
+        <p>Created by Sirui Liang, Great Bay University</p>
+        <p>Sincere gratitude to Dr. Xiaodong Cun and Mr. Yihan Hu, for their patient guidance during my study of Deep Learning.</p>
+    </footer>
 </body>

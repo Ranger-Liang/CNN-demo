@@ -89,6 +89,7 @@ select, input, button {
 .grid{
     display: grid;
     gap: 2px;
+    margin-top: 10px;
 }
 
 .cell {
@@ -123,4 +124,10 @@ select, input, button {
 
 .highlight{
     background-color: rgba(178, 178, 79, 0.699) !important;
+}
+
+footer{ 
+    color: rgb(72, 72, 72);
+    font-size: 12px;
+    text-align: center;
 }

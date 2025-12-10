@@ -8,7 +8,8 @@ let state = {
     outX: 0, 
     outY: 0,
     is_start: false,
-    is_stop: false
+    is_stop: false,
+    timer: null
 };
 
 
@@ -20,6 +21,11 @@ function init(){
         p: parseInt(document.getElementById('padding').value),
         s: parseInt(document.getElementById('stride').value)
     };
+
+    state.is_start = false;
+    state.is_stop = false;
+    state.outX = 0;
+    state.outY = 0;
 
     let out_size = Math.floor((config.n + 2*config.p - config.k) / config.s) + 1;
     if (out_size <= 0){
@@ -144,11 +150,43 @@ function next_step() {
     state.output[state.outY][state.outX] = sum;
     const out_cell = document.getElementById(`grid_output-${state.outY}-${state.outX}`);
     out_cell.innerText = sum;
-    document.getElementById('display').innerText = (`Output(${state.outY},${state.outX}) = ` + display.join(' + ') + ` = ${sum}`);
+    document.getElementById('display').innerText = (`Output(${state.outX},${state.outY}) = ` + display.join(' + ') + ` = ${sum}`);
 
     state.outX++;
     if (state.outX >= state.out) {
         state.outX = 0;
         state.outY ++;
     }
+
+    if (state.outY >= state.out){
+        state.is_stop = true;
+        stop();
+        document.getElementById('display').innerText = (`Calculation completed~~`)
+    }
+}
+
+
+function auto_play() {
+    if (state.is_start) {
+        stop();
+    }
+    else {
+        if (state.is_stop) {
+            init();
+            return;
+        }
+        state.is_start = true
+        document.getElementById('auto').innerText = "Pause";
+        document.getElementById('auto').style.backgroundColor = "rgba(167, 41, 119, 0.73)";
+        state.timer = setInterval(next_step, 300);        
+    }
+}
+
+function stop(){
+    state.is_start = false;
+    clearInterval(state.timer);
+    state.timer = null;
+    document.getElementById('auto').innerText = "Auto Play";
+    document.getElementById('auto').style.backgroundColor = "rgba(0, 255, 0, 0.729)";
+
 }
