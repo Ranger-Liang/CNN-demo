@@ -9,7 +9,8 @@ let state = {
     outY: 0,
     is_start: false,
     is_stop: false,
-    timer: null
+    timer: null,
+    is_pooling: false
 };
 
 
@@ -19,7 +20,8 @@ function init(){
         n: parseInt(document.getElementById('input_size').value),
         k: parseInt(document.getElementById('kernel_size').value),
         p: parseInt(document.getElementById('padding').value),
-        s: parseInt(document.getElementById('stride').value)
+        s: parseInt(document.getElementById('stride').value),
+        type: parseInt(document.getElementById('type').value)
     };
 
     state.is_start = false;
@@ -35,18 +37,18 @@ function init(){
     else if( (config.n + 2*config.p - config.k) % config.s != 0){
         alert("WARNING: (Input Size + 2 * Padding - Kernel Size) is not divisible by Stride. The output size will be rounded down.");
     }
-    state.out = out_size;
+    state.o = out_size;
     state.padded = config.n + 2 * config.p;
 
     document.getElementById('info_input').innerHTML = `Size: ${state.padded} x ${state.padded}`;
     document.getElementById('info_kernel').innerText = `Size: ${config.k} x ${config.k}`;
-    document.getElementById('info_output').innerText = `Size: ${state.out} x ${state.out}`;
+    document.getElementById('info_output').innerText = `Size: ${state.o} x ${state.o}`;
 
     Data()
 
     Grid('grid_input', state.padded_input, state.padded)
     Grid('grid_kernel', state.kernel, config.k)
-    Grid('grid_output', state.output, state.out)
+    Grid('grid_output', state.output, state.o)
     
     state.outX = 0;
     state.outY = 0;
@@ -59,13 +61,36 @@ function init(){
 function Data(){
     state.kernel = [];
     state.padded_input = [];
-    for(let r=0; r<config.k; r++){
-        let row = [];
-        for(let c=0; c<config.k; c++){
-            row.push(Math.floor(Math.random() * 6))
+    state.output = [];
+    
+    if (config.type === 0){
+        for(let r=0; r<config.k; r++){
+            let row = [];
+            for(let c=0; c<config.k; c++){
+                row.push(Math.floor(Math.random() * 6))
+            }
+            state.kernel.push(row);
         }
-        state.kernel.push(row);
     }
+    else if (config.type === 1) {
+        for(let r=0; r<config.k; r++){
+            let row = [];
+            for(let c=0; c<config.k; c++){
+                row.push("max");
+            }
+            state.kernel.push(row);
+        }
+    }
+    else {
+        for(let r=0; r<config.k; r++){
+            let row = [];
+            for(let c=0; c<config.k; c++){
+                row.push("avg");
+            }
+            state.kernel.push(row);
+        }
+    }
+
     
     for(let r=0; r<state.padded; r++){
         let row = [];
@@ -84,8 +109,18 @@ function Data(){
         }
         state.padded_input.push(row);
     }
-    state.output = Array(state.out).fill(0).map(() => Array(state.out).fill(null));
+    
+    for(let r=0; r<state.o; r++){
+        let row = [];
+        for(let c=0; c<state.o; c++){
+            row.push(null);
+        }
+        state.output.push(row);
+    }
+    
 }
+
+
 
 function Grid(grid_id, data, size){
     const grid = document.getElementById(grid_id);
@@ -126,13 +161,39 @@ function next_step() {
     const startX = state.outX * config.s;
     const startY = state.outY * config.s;
 
+    if (config.type === 0){
+        Conv(startX, startY);
+    }        
+    else if (config.type === 1){
+        Max(startX, startY);
+    }        
+    else {
+        Avg(startX, startY);
+    }
+
+
+    state.outX++;
+    if (state.outX >= state.o) {
+        state.outX = 0;
+        state.outY ++;
+    }
+
+    if (state.outY >= state.o){
+        state.is_stop = true;
+        stop();
+        document.getElementById('display').innerText = (`Calculation completed~~`)
+    }
+}
+
+
+function Conv(X, Y) {    
     let sum = 0;
     let display = [];
 
     for (let k_r=0; k_r<config.k; k_r++){
         for (let k_c=0; k_c<config.k; k_c++){
-            let i_r = startY + k_r;
-            let i_c = startX + k_c;
+            let i_r = Y + k_r;
+            let i_c = X + k_c;
 
             const i_cell = document.getElementById(`grid_input-${i_r}-${i_c}`);
             if (i_cell) { 
@@ -148,22 +209,63 @@ function next_step() {
         }
     }
     state.output[state.outY][state.outX] = sum;
-    const out_cell = document.getElementById(`grid_output-${state.outY}-${state.outX}`);
-    out_cell.innerText = sum;
+    document.getElementById(`grid_output-${state.outY}-${state.outX}`).innerText = sum;
     document.getElementById('display').innerText = (`Output(${state.outX},${state.outY}) = ` + display.join(' + ') + ` = ${sum}`);
-
-    state.outX++;
-    if (state.outX >= state.out) {
-        state.outX = 0;
-        state.outY ++;
-    }
-
-    if (state.outY >= state.out){
-        state.is_stop = true;
-        stop();
-        document.getElementById('display').innerText = (`Calculation completed~~`)
-    }
 }
+
+function Max(X, Y) {
+
+}
+
+function Avg(X, Y) {
+    let sum = 0;
+    let avg = 0;
+    let display = [];
+
+    for (let k_r=0; k_r<config.k; k_r++){
+        for (let k_c=0; k_c<config.k; k_c++){
+            let i_r = Y + k_r;
+            let i_c = X + k_c;
+
+            const i_cell = document.getElementById(`grid_input-${i_r}-${i_c}`);
+            if (i_cell) { 
+                i_cell.classList.add('highlight');
+            }
+            let i_value = state.padded_input[i_r][i_c].value;
+
+            sum += i_value;
+            if (i_value != 0) {
+                display.push(`${i_value}`);
+            }
+        }
+    }
+    avg = Math.round(sum / (config.k**2))
+    state.output[state.outY][state.outX] = avg;
+    document.getElementById(`grid_output-${state.outY}-${state.outX}`).innerText = avg;
+    document.getElementById('display').innerText = (`Output(${state.outX},${state.outY}) = (` + display.join(' + ') + `) / ${config.k**2} = ${avg}`);
+}
+
+function Max(X, Y) {
+    let i_value = []
+    for (let k_r=0; k_r<config.k; k_r++){
+        for (let k_c=0; k_c<config.k; k_c++){
+            let i_r = Y + k_r;
+            let i_c = X + k_c;
+
+            const i_cell = document.getElementById(`grid_input-${i_r}-${i_c}`);
+            if (i_cell) { 
+                i_cell.classList.add('highlight');
+            }
+            i_value.push(state.padded_input[i_r][i_c].value);         
+        }
+    }
+    let max = Math.max(...i_value)
+    state.output[state.outY][state.outX] = max;
+    document.getElementById(`grid_output-${state.outY}-${state.outX}`).innerText = max
+    document.getElementById('display').innerText = (`Output(${state.outX},${state.outY}) = max{` + i_value.join(', ') + `} = ${max}`);
+}
+    
+
 
 
 function auto_play() {
