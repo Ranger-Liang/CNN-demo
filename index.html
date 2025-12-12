@@ -14,7 +14,7 @@
             本作品在编程阶段几乎未使用任何AIGC（除了vscode内置的Copilot偶尔会给我自动补全代码）
             但是在开始之前，我通过指导Gemini-3.0-pro完成了另一个作品(Transformer 架构的动态展示)
             https://ranger-liang.github.io/Dynamic-Demonstrate-of-Transformer/
-            本作品的代码架构和部分细节设计参考了该作品（对该作品的深入分析和学习是我网页制作知识的主要来源。）
+            本作品的代码架构和部分细节设计参考了该作品（对该作品的深入分析和消融是我网页制作知识的主要来源。）
     -->       
 </head>
 
@@ -86,7 +86,11 @@
     </div>
 
     <div id="play">
-        <div id="display">Please set parameters and click Apply to start. o(￣▽￣)d</div>
+        <div id="display">
+            Please set parameters and click "Apply" to start. o(￣▽￣)d
+            <br>
+            The numbers are randomly generated, but the output will be calculated on your browser.
+        </div>
         <div id="play_control">
             <button class="control_button" id="step"  onclick="next_step()">Next Step</button>
             <button class="control_button" id="auto" onclick="auto_play()">Auto Play</button>

@@ -210,6 +210,7 @@ function Conv(X, Y) {
     }
     state.output[state.outY][state.outX] = sum;
     document.getElementById(`grid_output-${state.outY}-${state.outX}`).innerText = sum;
+    document.getElementById(`grid_output-${state.outY}-${state.outX}`).classList.add('highlight');
     document.getElementById('display').innerText = (`Output(${state.outX},${state.outY}) = ` + display.join(' + ') + ` = ${sum}`);
 }
 
