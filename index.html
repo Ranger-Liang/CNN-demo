@@ -24,20 +24,20 @@
         CNN Demo
     </h1>
     
-    <div class="control_panel">
-        <div class="controller">
+    <div class="parameters">
+        <div>
             <label>Layer type: </label>
-            <select id="type">
+            <select id="type" style="width: 105px;">
                 <option value="0" selected>Conv2d</option>
                 <option value="1">Max pooling</option>
                 <option value="2">Avg pooling</option>
             </select>
         </div>
-        <div class="controller">
+        <div>
             <label>Input Size: </label>
             <input type="number" id="input_size" value="7" min="3" max="10">
         </div>
-        <div class="controller">
+        <div>
             <label>Kernel Size: </label>
             <select id="kernel_size">
                 <option value="1">1 × 1</option>
@@ -50,7 +50,7 @@
             <label>Padding: </label>
             <input type="number" id="padding" value="1" min="0" max="5">
         </div>
-        <div class="controller">
+        <div>
             <label>Stride: </label>
             <input type="number" id="stride" value="1" min="1" max="5">
         </div>
@@ -89,12 +89,12 @@
         <div id="display">
             Please set parameters and click "Apply" to start. o(￣▽￣)d
             <br>
-            The numbers are randomly generated, but the output will be calculated on your browser.
+            Data is randomly generated, but the output will be calculated on your browser.
         </div>
         <div id="play_control">
             <button class="control_button" id="step"  onclick="next_step()">Next Step</button>
             <button class="control_button" id="auto" onclick="auto_play()">Auto Play</button>
-            <button class="control_button" id="reset" onclick="init()">Reset</button>
+            <button class="control_button" id="reset" onclick="reset()">Reset</button>
         </div>
     </div>
     

@@ -45,7 +45,13 @@ function init(){
     document.getElementById('info_output').innerText = `Size: ${state.o} x ${state.o}`;
 
     Data()
+    
+    reset()
+}
 
+
+function reset() {
+    reset_output()
     Grid('grid_input', state.padded_input, state.padded)
     Grid('grid_kernel', state.kernel, config.k)
     Grid('grid_output', state.output, state.o)
@@ -57,17 +63,15 @@ function init(){
 }
 
 
-
 function Data(){
     state.kernel = [];
     state.padded_input = [];
-    state.output = [];
     
     if (config.type === 0){
         for(let r=0; r<config.k; r++){
             let row = [];
             for(let c=0; c<config.k; c++){
-                row.push(Math.floor(Math.random() * 6))
+                row.push(Math.floor(Math.random() * 5) + 1)
             }
             state.kernel.push(row);
         }
@@ -109,7 +113,12 @@ function Data(){
         }
         state.padded_input.push(row);
     }
+
     
+}
+
+function reset_output() {
+    state.output = [];
     for(let r=0; r<state.o; r++){
         let row = [];
         for(let c=0; c<state.o; c++){
@@ -117,7 +126,6 @@ function Data(){
         }
         state.output.push(row);
     }
-    
 }
 
 
