@@ -13,7 +13,7 @@ This project provides a dynamic visualization of how Convolutional Neural Networ
 The core of this project is **dynamic visualization**. Follow these steps to experience it:
 
 1.  **Access the Page**: Open the link above.
-2.  **Observe the Architecture**: The page displays a classic CNN flow (Input -> Convolution -> Pooling -> Output).
+2.  **Observe the Architecture**: The page displays a classic CNN flow (Input -> Convolution or Pooling -> Output).
 3.  **Watch the Animation**:
     *   **Sliding Window**: Observe how the Kernel slides across the input matrix.
     *   **Real-time Calculation**: Watch how the values in the Feature Map are generated through multiplication and addition operations at each step.
@@ -38,7 +38,7 @@ This project embodies three core computer science paradigms:
 This project maintains transparency regarding the use of AI tools:
 
 1.  **Coding Phase**:
-    *   This project was developed with **almost no AIGC (AI-Generated Content)**.
+    *   This project was developed with **almost no AIGC**.
     *   The code was written manually, with the exception of standard code autocompletion provided by VS Code's built-in Copilot.
 
 2.  **Background & Inspiration**:
