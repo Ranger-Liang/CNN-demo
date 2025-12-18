@@ -139,3 +139,9 @@ footer{
     font-size: 12px;
     text-align: center;
 }
+#describe{
+    color: rgb(72, 72, 72);
+    font-size: 18px;
+    text-align: center;
+    margin-top: -15px;
+}

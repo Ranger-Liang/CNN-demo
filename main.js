@@ -212,7 +212,7 @@ function Conv(X, Y) {
 
             sum += i_value * k_value;
             if (i_value != 0 && k_value != 0) {
-                display.push(`${i_value} × ${k_value}`);
+                display.push(`(${i_value} × ${k_value})`);
             }
         }
     }
