@@ -79,6 +79,7 @@ button {
     flex-direction: column;
     align-items: center;
     padding: 5px;
+    text-align: center;
 }
 
 #step{
@@ -110,7 +111,7 @@ button {
 }
 
 .cell.input_cell{
-    background-color: rgba(125, 189, 226, 0.659);
+    background-color: rgba(125, 189, 226);
 }
 
 .cell.padding_cell{
@@ -123,7 +124,7 @@ button {
 }
 
 .cell.output_cell{
-    background-color: rgba(171, 253, 226, 0.711);
+    background-color: rgba(0, 201, 167, 0.5);
 }
 
 .symbol{
@@ -132,6 +133,7 @@ button {
 
 .highlight{
     background-color: rgba(178, 178, 79, 0.699) !important;
+    opacity: 100% !important;
 }
 
 footer{ 
@@ -142,6 +144,7 @@ footer{
 #describe{
     color: rgb(72, 72, 72);
     font-size: 18px;
+    display: block;
     text-align: center;
     margin-top: -15px;
 }

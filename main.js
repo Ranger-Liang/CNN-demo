@@ -10,7 +10,7 @@ let state = {
     is_start: false,
     is_stop: false,
     timer: null,
-    is_pooling: false
+    is_pooling: false,
 };
 
 
@@ -142,15 +142,24 @@ function Grid(grid_id, data, size){
 
             if (grid_id === 'grid_input') {
                 cell.innerText = data[r][c].value;
-                cell.className = data[r][c].is_pad ? 'cell padding_cell' : 'cell input_cell';
+                if (data[r][c].is_pad) {
+                    cell.className = 'cell padding_cell';
+                }
+                else {
+                    cell.className = 'cell input_cell';
+                    let alpha = 0.5 + data[r][c].value / 20;
+                    cell.style.opacity = alpha;
+                }
+                
+ 
             }
             else if (grid_id === 'grid_kernel') {
                 cell.innerText = data[r][c];
-                cell.className = 'cell kernel_cell' ;
+                cell.className = 'cell kernel_cell';
             }
             else {
                 cell.innerText = data[r][c];
-                cell.className = 'cell output_cell' ;
+                cell.className = 'cell output_cell';
             }
 
             grid.appendChild(cell);
@@ -179,6 +188,8 @@ function next_step() {
         Avg(startX, startY);
     }
 
+    document.getElementById(`grid_output-${state.outY}-${state.outX}`).style.backgroundColor = 'rgba(0, 201, 167)';
+    document.getElementById(`grid_output-${state.outY}-${state.outX}`).classList.add('highlight');
 
     state.outX++;
     if (state.outX >= state.o) {
@@ -189,8 +200,12 @@ function next_step() {
     if (state.outY >= state.o){
         state.is_stop = true;
         stop();
-        document.getElementById('display').innerText = (`Calculation completed~~`)
+        document.getElementById('display').innerHTML = (`Calculation completed~~
+            <br>
+            You can see how convolution extracts image features from the depth of colors.`)
+        document.querySelectorAll('.highlight').forEach(e => e.classList.remove('highlight'));
     }
+
 }
 
 
@@ -218,13 +233,16 @@ function Conv(X, Y) {
     }
     state.output[state.outY][state.outX] = sum;
     document.getElementById(`grid_output-${state.outY}-${state.outX}`).innerText = sum;
-    document.getElementById(`grid_output-${state.outY}-${state.outX}`).classList.add('highlight');
     document.getElementById('display').innerText = (`Output(${state.outX},${state.outY}) = ` + display.join(' + ') + ` = ${sum}`);
+
+    let alpha  = 0.1 + sum / ((config.k ** 2) * 25);
+    if (alpha > 1) {
+        alpha = 1;
+    }
+    document.getElementById(`grid_output-${state.outY}-${state.outX}`).style.opacity = alpha;
+    
 }
 
-function Max(X, Y) {
-
-}
 
 function Avg(X, Y) {
     let sum = 0;
@@ -252,6 +270,15 @@ function Avg(X, Y) {
     state.output[state.outY][state.outX] = avg;
     document.getElementById(`grid_output-${state.outY}-${state.outX}`).innerText = avg;
     document.getElementById('display').innerText = (`Output(${state.outX},${state.outY}) = (` + display.join(' + ') + `) / ${config.k**2} = ${avg}`);
+
+    let alpha  = avg / 7;
+    if (alpha > 1) {
+        alpha = 1;
+    }
+    else if (alpha < 0.1) {
+        alpha = 0.1;
+    }
+    document.getElementById(`grid_output-${state.outY}-${state.outX}`).style.opacity = alpha;
 }
 
 function Max(X, Y) {
@@ -272,10 +299,16 @@ function Max(X, Y) {
     state.output[state.outY][state.outX] = max;
     document.getElementById(`grid_output-${state.outY}-${state.outX}`).innerText = max
     document.getElementById('display').innerText = (`Output(${state.outX},${state.outY}) = max{` + i_value.join(', ') + `} = ${max}`);
+    let alpha  = (max**2) / 100;
+    if (alpha > 1) {
+        alpha = 1;
+    }
+    else if (alpha < 0.1) {
+        alpha = 0.1;
+    }
+    document.getElementById(`grid_output-${state.outY}-${state.outX}`).style.opacity = alpha;
 }
     
-
-
 
 function auto_play() {
     if (state.is_start) {
@@ -289,7 +322,7 @@ function auto_play() {
         state.is_start = true
         document.getElementById('auto').innerText = "Pause";
         document.getElementById('auto').style.backgroundColor = "rgba(167, 41, 119, 0.73)";
-        state.timer = setInterval(next_step, 300);        
+        state.timer = setInterval(next_step, 200);        
     }
 }
 
@@ -299,5 +332,4 @@ function stop(){
     state.timer = null;
     document.getElementById('auto').innerText = "Auto Play";
     document.getElementById('auto').style.backgroundColor = "rgba(0, 255, 0, 0.729)";
-
 }
