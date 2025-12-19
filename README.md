@@ -4,7 +4,7 @@ This project provides a dynamic visualization of how Convolutional Neural Networ
 
 ## 🔗 Live Demo
 
-👉 **[Click here to open the demonstration](https://ranger-liang.github.io/CNN-demo/)**
+👉 **[Click here to open the demonstration](https://ranger-liang.github.io/CNN-demo/){target="_blank"}**
 
 > No installation required. Works directly in modern web browsers.
 
