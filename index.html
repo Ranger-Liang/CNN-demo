@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CNN demo</title>
+    <title>CNN 卷积神经网络演示</title>
     <link rel="stylesheet" href="style.css">
     <script src="main.js"></script>
     <!--    
@@ -17,35 +17,66 @@
             准备阶段：
                 但是在开始之前，我通过指导Gemini-3.0-pro完成了另一个作品(Transformer 架构的动态展示 https://ranger-liang.github.io/Dynamic-Demonstrate-of-Transformer/)
                 本作品的代码架构和部分细节设计参考了该作品（对该作品的深入分析和消融是我网页制作知识的主要来源。）
-    -->       
+    -->   
 </head>
 
 <body>
     
     <h1>
-        Dynamic Demonstrate of Convolutional Neural Networks
+        卷积神经网络 (CNN) 动态演示
     </h1>
     <p id="describe">
-        If you want to know more details about CNN, please click <a href="https://d2l.ai/chapter_convolutional-neural-networks/conv-layer.html" target="_blank">here</a> 
-        (<a href="https://zh-v2.d2l.ai/chapter_convolutional-neural-networks/conv-layer.html" target="_blank">中文版</a>) to learn.
+        卷积层是 CNN 的核心组件，利用卷积核在图像上滑动，从而提取关键的局部特征。<br>
+        本项目已在 <a href="https://github.com/Ranger-Liang/CNN-demo" target="_blank">GitHub</a> 开源，点击可查看说明和源码。
     </p>
     
     <div class="parameters">
         <div>
-            <label>Layer type: </label>
-            <select id="type" style="width: 105px;">
-                <option value="0" selected>Conv2d</option>
-                <option value="1">Max pooling</option>
-                <option value="2">Avg pooling</option>
+            <label>层类型: </label>
+            <select id="type" style="width: 105px;" onchange="Type()">
+                <option value="0" selected>卷积 (Conv2d)</option>
+                <option value="1">最大池化 (Max Pooling)</option>
+                <option value="2">平均池化 (Avg Pooling)</option>
             </select>
         </div>
         <div>
-            <label>Input Size: </label>
-            <input type="number" id="input_size" value="7" min="3" max="10">
+            <label>输入图案: </label>
+            <select id="input_pattern" style="width: 85px;" onchange="Pattern()">
+                <option value="random" title="您可以自由设置输入大小！">随机噪声</option>
+                <option value="cat">鸭子🦆</option>
+                <option value="dog" selected>小狗🐱</option>
+                <option value="face" >笑脸:)</option>
+                <option value="heart">爱心❤️</option>
+                <option value="invader">像素怪兽👾</option>
+                <option value="checker">棋盘格🏁</option>
+                <option value="spiral">螺旋线🌀</option>
+                <option value="gradient">金字塔</option>
+            </select>
         </div>
         <div>
-            <label>Kernel Size: </label>
-            <select id="kernel_size">
+            <label>输入尺寸: </label>
+            <input type="number" id="input_size" value="9" min="3" max="10" disabled="true" onchange="init()">
+        </div>
+        <div>
+            <label>预设卷积核: </label>
+                <select id="preset" style="width: 85px;" onchange="Preset()">
+                <option value="customize" title="随机生成。您可以自由设置卷积核大小！">
+                    随机</option>
+                <option value="sobel-x" title="【垂直边缘检测】左正右负。用于检测图像中的垂直线条。">
+                    垂直边缘(Vertical)</option>
+                <option value="sobel-y" title="【水平边缘检测】上正下负。用于检测图像中的水平线条。">
+                    水平边缘(Horizontal)</option>
+                <option value="outline" selected title="【轮廓提取】高亮各个方向上亮度剧烈变化（边缘）的区域。">
+                    轮廓(Outline)</option>
+                <option value="sharpen" title="【锐化】增强中心像素与周围像素的对比度。">
+                    锐化(Sharpen)</option>
+                <option value="blur" title="【高斯模糊】加权平均。减少噪声和细节，使图像变得平滑。">
+                    高斯模糊(Blur)</option>
+            </select>
+        </div>
+        <div>
+            <label>核大小 (Kernel): </label>
+            <select id="kernel_size" style="width: 70px;" disabled="true" onchange="init()">
                 <option value="1">1 × 1</option>
                 <option value="3" selected>3 × 3</option>
                 <option value="5">5 × 5</option>
@@ -53,22 +84,22 @@
             </select>
         </div>
         <div>
-            <label>Padding: </label>
-            <input type="number" id="padding" value="1" min="0" max="5">
+            <label>填充 (Padding): </label>
+            <input type="number" id="padding" value="1" min="0" max="5" onchange="init()">
         </div>
         <div>
-            <label>Stride: </label>
-            <input type="number" id="stride" value="1" min="1" max="5">
+            <label>步幅 (Stride): </label>
+            <input type="number" id="stride" value="1" min="1" max="5" onchange="init()">
         </div>
-        <button class="control_button" id="apply" onclick="init()">Apply</button>     
+        <button class="control_button" id="apply" onclick="init()">应用</button>     
     </div>
     
     <div class="container">
 
         <!--Input-->
         <div class="wrapper">
-            <div class="title">Input + Padding</div>
-            <div class="info" id="info_input">Size: ?</div>
+            <div class="title">输入 + 填充</div>
+            <div class="info" id="info_input">尺寸: ?</div>
             <div class="grid" id="grid_input"></div>
         </div>
 
@@ -76,8 +107,8 @@
 
         <!--Kernel-->
         <div class="wrapper">
-            <div class="title">Kernel</div>
-            <div class="info" id="info_kernel">Size: ?</div>
+            <div class="title">卷积核</div>
+            <div class="info" id="info_kernel">尺寸: ?</div>
             <div class="grid" id="grid_kernel"></div>
         </div>
 
@@ -85,26 +116,27 @@
 
         <!--Output-->
         <div class="wrapper">
-            <div class="title">Output</div>
-            <div class="info" id="info_output">Size: ?</div>
+            <div class="title">输出特征图</div>
+            <div class="info" id="info_output">尺寸: ?</div>
             <div class="grid" id="grid_output"></div>
         </div>
     </div>
 
     <div id="play">
         <div id="display">
-            Please set parameters and click "Apply" to start. o(￣▽￣)d
+            请调整上方参数并点击“应用”开始 o(￣▽￣)d
             <br>
-            Data is randomly generated, but the output will be calculated on your browser.
+            输入数据是预设或随机生成的，但所有的卷积计算都会在您的浏览器中实时完成
         </div>
         <div id="play_control">
-            <button class="control_button" id="step"  onclick="next_step()">Next Step</button>
-            <button class="control_button" id="auto" onclick="auto_play()">Auto Play</button>
-            <button class="control_button" id="reset" onclick="reset()">Reset</button>
+            <button class="control_button" id="step"  onclick="next_step()" disabled="true">单步执行</button>
+            <button class="control_button" id="auto" onclick="auto_play()" disabled="true">自动执行</button>
+            <button class="control_button" id="reset" onclick="reset()" disabled="true">重置</button>
         </div>
     </div>
     
     <footer>
+        <p>如需深入了解卷积运算的数学定义，建议参阅 <a href="https://zh-v2.d2l.ai/chapter_convolutional-neural-networks/conv-layer.html" target="_blank">《动手学深度学习》</a> 相关章节。</p>
         <p>Created by Sirui Liang, Great Bay University</p>
         <p>Sincere gratitude to Dr. Xiaodong Cun and Mr. Yihan Hu, for their patient guidance during my study of Deep Learning.</p>
     </footer>

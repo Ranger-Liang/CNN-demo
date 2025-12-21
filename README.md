@@ -1,46 +1,67 @@
-# CNN-demo: Dynamic Demonstration of Convolutional Neural Networks
+# CNN-demo: 卷积神经网络(CNN)原理动态演示
 
-This project provides a dynamic visualization of how Convolutional Neural Networks (CNN) work. It visually presents the internal mathematical operations, helping learners intuitively understand core concepts like convolution and pooling.
+这是一个旨在通过**可视化**和**动态交互**来揭示卷积神经网络（CNN）内部工作原理的教育类项目。它摒弃了枯燥的数学公式堆砌，通过直观的动画演示，帮助学习者理解“卷积”、“池化”、“特征提取”等核心概念。
 
-## 🔗 Live Demo
+## 🔗 在线体验
 
-👉 **[Click here to open the demonstration](https://ranger-liang.github.io/CNN-demo/)**
+👉 **点击[这里](https://ranger-liang.github.io/CNN-demo/)直接打开演示网页**
 
-> No installation required. Works directly in modern web browsers.
+> 纯前端实现，无需安装环境，现代浏览器即开即用。
 
-## 📖 Usage Guide
+## 📖 使用指南
 
-The core of this project is **dynamic visualization**. Follow these steps to experience it:
+1.  **选择图案**：在 "输入图案n" 中选择一个预设（如 "小猫"），或选择 "随机噪声" 随机生成（可自定义大小）。
+2.  **选择卷积核**：尝试不同的卷积核，例如：
+    *   **Vertical Edge**：观察是否提取出了物体的垂直轮廓。
+    *   **Blur**：观察图像是否变得平滑。
+3.  **播放动画**：
+    *   点击 **"单步执行"** 进行单步调试，观察具体的数学运算。
+    *   点击 **"自动执行"** 观看完整的滑动窗口过程。
 
-1.  **Access the Page**: Open the link above.
-2.  **Observe the Architecture**: The page displays a classic CNN flow (Input -> Convolution or Pooling -> Output).
-3.  **Watch the Animation**:
-    *   **Sliding Window**: Observe how the Kernel slides across the input matrix.
-    *   **Real-time Calculation**: Watch how the values in the Feature Map are generated through multiplication and addition operations at each step.
-    *   **Data Flow**: Follow the animation to see how features are extracted from raw data layer by layer.
+## ✨ 项目特色
 
-## 💡 Project Highlights
+与传统的静态图解不同，本项目包含以下创新功能：
 
-### Concept
-**CNN Dynamic Demonstration**: moving away from static formulas to explain complex neural network algorithms through dynamic graphical language.
+1.  **趣味像素画输入**：
+    *   内置了精心设计的 **9x9 像素画**，包括**侧视图的小猫、小狗、小鸭子、霸王龙**，以及经典的橡皮鸭。
+    *   包含用于测试边缘检测的**棋盘格**和**螺旋线**，以及用于观察梯度的**金字塔**。
+    *   支持**手绘模式**：点击输入层的格子即可修改像素值，实时观察输出变化。
 
-### Key Knowledge Points
-This project embodies three core computer science paradigms:
-*   **Abstraction**: Modeling complex mathematical logic into visual elements.
-*   **Modularization**: Breaking down network layers into independent, reusable functional modules.
-*   **Divide and Conquer Paradigm**: Decomposing massive network computations into local matrix operation units.
+2.  **沉浸式热力图 (Heatmap)**：
+    *   输出层采用动态**薄荷绿热力图**。颜色的深浅（透明度）直接对应数值的大小。
+    *   这直观地展示了**“特征提取”**的过程——颜色越深，代表卷积核在那个位置找到了它正在寻找的特征（如轮廓、边缘）。
 
-### Innovation
-*   **Intuitive Mathematical Presentation**: It doesn't just show the result; it visualizes the *process*, making the "black box" transparent by animating the underlying math.
+3.  **交互式算法控制**：
+    *   支持 **卷积 (Conv2d)**、**最大池化 (Max Pooling)**、**平均池化 (Avg Pooling)** 三种模式。
+    *   可自定义 **卷积核大小 (Kernel Size)**、**填充 (Padding)** 和 **步幅 (Stride)**，并实时看到网格结构的变化。
 
-## 🤖 About AI
+## 🧠 核心知识点 (Knowledge Points)
 
-This project maintains transparency regarding the use of AI tools:
+本项目基于大湾区大学计算机科学导论课程（CS101）的核心思维构建，具体对应以下知识点：
 
-1.  **Coding Phase**:
-    *   This project was developed with **almost no AIGC**.
-    *   The code was written manually, with the exception of standard code autocompletion provided by VS Code's built-in Copilot.
+### 1. 自动执行的计算过程 (计算过程单元)
+> **"Turning abstract formulas into automated, observable steps."**
 
-2.  **Background & Inspiration**:
-    *   Before starting this project, I completed another work, [**Dynamic Demonstration of Transformer**](https://ranger-liang.github.io/Dynamic-Demonstrate-of-Transformer/), under the guidance of **Gemini-3.0-pro**.
-    *   **Learning by Analysis**: The code architecture and design details of this CNN demo reference that Transformer project. My knowledge of web development for this project was primarily derived from a deep analysis and ablation study of that previous AI-guided work.
+本项目将抽象的卷积公式 $Y = \sum (X \cdot K)$ 具象化为**自动执行的动画**。
+*   **可视化状态机**：程序维护了一个“滑动窗口”的状态，用户可以看到计算焦点如何按照既定的步幅（Stride）在矩阵上移动。
+*   **过程透明化**：每一个输出像素的生成，都对应着一次完整的“乘加运算”过程展示。这种将“黑盒”计算过程拆解为肉眼可见的自动执行步骤，完美诠释了冯·诺依曼架构下程序按指令序列自动执行的本质。
+
+### 2. 分治范式 (算法思维单元)
+> **"Solving complex problems by breaking them down."**
+
+卷积神经网络的核心思想正是算法设计中的**分治范式**。
+*   **局部感受野**：通过演示可以看出，CNN 并不一次性处理整张图片，而是通过一个小的卷积核（如 3x3），将巨大的图像识别任务分解为无数个局部的、微小的矩阵运算任务。
+*   **局部到整体**：每个小的计算单元只负责提取局部的特征（如一条竖线、一个圆弧），最终这些局部特征组合起来，形成了对整体图像的理解。
+
+
+## 🤖 关于 AI 与创作背景
+
+本项目保持对 AI 工具使用的透明度：
+
+1.  **编码实现**：
+    *   本项目绝大部分代码为**手动编写**。
+    *   除了 VS Code 内置 Copilot 的基础代码补全外，未依赖 AIGC 生成核心逻辑。
+
+2.  **灵感与传承**：
+    *   在开启本项目之前，我在指导 **Gemini-3.0-pro** 完成了一个 [Transformer 动态演示](https://ranger-liang.github.io/Dynamic-Demonstrate-of-Transformer/)项目。
+    *   **通过分析学习 (Learning by Analysis)**：本项目的代码架构、UI 设计思路以及 Web 开发技巧，均源于我对上一个 AI 辅助项目的**深度解析、消融实验与重构**。这不仅仅是一个代码作品，更是我消化并内化 AI 知识的证明。

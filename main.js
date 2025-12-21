@@ -13,6 +13,104 @@ let state = {
     is_pooling: false,
 };
 
+const kernel_presets = {
+    "sobel-x":  [[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]],
+    "sobel-y":  [[1, 2, 1], [0, 0, 0], [-1, -2, -1]],
+    "outline":  [[-1, -1, -1], [-1, 8, -1], [-1, -1, -1]],
+    "sharpen":  [[0, -1, 0], [-1, 5, -1], [0, -1, 0]],
+    "blur":   [[1, 2, 1], [2, 4, 2], [1, 2, 1]]
+};
+
+const input_pattern = {
+    "cat": [
+        [0, 0, 0, 0, 0, 0, 0, 0, 0]  ,
+        [0, 0, 0, 4, 6, 4, 0, 0, 0], // 圆润的头顶
+        [0, 9, 9, 6, 10, 6, 0, 0, 0], // 黑眼睛 (10)
+        [0, 0, 0, 6, 6, 6, 0, 0, 0], // 红嘴巴 (9) 向左突出
+        [0, 0, 5, 5, 5, 4, 6, 8, 0], // 脖子收缩，尾巴尖 (8) 翘起
+        [0, 6, 8, 8, 8, 8, 8, 6, 0], // 挺胸，身体饱满
+        [0, 6, 8, 5, 5, 8, 6, 0, 0], // 翅膀轮廓 (中间色5做层次)
+        [0, 4, 7, 8, 8, 7, 4, 0, 0], // 平稳的底部
+        [0, 0, 0, 0, 0, 0, 0, 0, 0] // 干干净净，没有水面
+    ],
+    "dog": [
+        [0, 0, 0, 4, 4, 4, 0, 0, 0], 
+        [0, 2, 7, 5, 5, 5, 7, 2, 0], 
+        [0, 7, 8, 5, 5, 5, 8, 7, 0], 
+        [0, 8, 4, 10, 4, 10, 4, 8, 0], 
+        [0, 8, 4, 4, 4, 4, 4, 8, 0], 
+        [0, 4, 5, 9, 10, 9, 5, 4, 0], 
+        [0, 0, 5, 5, 8, 5, 5, 0, 0], 
+        [0, 0, 0, 4, 4, 4, 0, 0, 0], 
+        [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    ],
+    "face": [
+        [0, 3, 6, 6, 6, 6, 6, 3, 0],
+        [3, 6, 4, 4, 4, 4, 4, 6, 3],
+        [6, 4, 10, 4, 4, 4, 10, 4, 6], 
+        [6, 4, 4, 4, 4, 4, 4, 4, 6],
+        [6, 4, 4, 4, 4, 4, 4, 4, 6],
+        [6, 4, 10, 4, 4, 4, 10, 4, 6], 
+        [3, 6, 4, 10, 10, 10, 4, 6, 3], 
+        [0, 3, 6, 4, 4, 4, 6, 3, 0],
+        [0, 0, 3, 6, 6, 6, 3, 0, 0]
+    ],
+    "heart": [
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 2, 8, 4, 0, 4, 8, 2, 0],
+        [2, 8, 10, 8, 4, 8, 10, 8, 2],
+        [4, 8, 10, 10, 10, 10, 10, 8, 4],
+        [0, 4, 8, 10, 10, 10, 8, 4, 0],
+        [0, 0, 4, 8, 10, 8, 4, 0, 0],
+        [0, 0, 0, 4, 8, 4, 0, 0, 0],
+        [0, 0, 0, 0, 4, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    ],
+    "invader": [
+        [0, 0, 0, 8, 0, 8, 0, 0, 0],
+        [0, 0, 0, 8, 8, 8, 0, 0, 0],
+        [0, 0, 8, 8, 8, 8, 8, 0, 0],
+        [0, 8, 8, 0, 8, 0, 8, 8, 0],
+        [8, 8, 8, 8, 8, 8, 8, 8, 8],
+        [8, 0, 8, 8, 8, 8, 8, 0, 8],
+        [8, 0, 8, 0, 0, 0, 8, 0, 8],
+        [0, 0, 0, 8, 8, 8, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    ],
+    "checker": [
+        [10, 0, 10, 0, 10, 0, 10, 0, 10],
+        [0, 10, 0, 10, 0, 10, 0, 10, 0],
+        [10, 0, 10, 0, 10, 0, 10, 0, 10],
+        [0, 10, 0, 10, 0, 10, 0, 10, 0],
+        [10, 0, 10, 0, 10, 0, 10, 0, 10],
+        [0, 10, 0, 10, 0, 10, 0, 10, 0],
+        [10, 0, 10, 0, 10, 0, 10, 0, 10],
+        [0, 10, 0, 10, 0, 10, 0, 10, 0],
+        [10, 0, 10, 0, 10, 0, 10, 0, 10]
+    ],
+    "spiral": [
+        [10, 10, 10, 10, 10, 10, 10, 10, 10],
+        [0, 0, 0, 0, 0, 0, 0, 0, 10],
+        [0, 10, 10, 10, 10, 10, 10, 0, 10],
+        [0, 10, 0, 0, 0, 0, 10, 0, 10],
+        [0, 10, 0, 10, 10, 0, 10, 0, 10],
+        [0, 10, 0, 10, 0, 0, 10, 0, 10],
+        [0, 10, 0, 10, 10, 10, 10, 0, 10],
+        [0, 10, 0, 0, 0, 0, 0, 0, 10],
+        [0, 10, 10, 10, 10, 10, 10, 10, 10]
+    ],
+    "gradient": [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 3, 3, 3, 3, 3, 3, 1],
+        [1, 3, 5, 5, 5, 5, 5, 3, 1],
+        [1, 3, 5, 8, 8, 8, 5, 3, 1],
+        [1, 3, 5, 8, 10, 8, 5, 3, 1], 
+        [1, 3, 5, 8, 8, 8, 5, 3, 1],
+        [1, 3, 5, 5, 5, 5, 5, 3, 1],
+        [1, 3, 3, 3, 3, 3, 3, 3, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1]
+    ]
+}
 
 
 function init(){
@@ -29,13 +127,17 @@ function init(){
     state.outX = 0;
     state.outY = 0;
 
+    document.getElementById("step").disabled = false;
+    document.getElementById("auto").disabled = false;
+    document.getElementById("reset").disabled = false;    
+
     let out_size = Math.floor((config.n + 2*config.p - config.k) / config.s) + 1;
     if (out_size <= 0){
-        alert("ERROR: Output size is non-positive! Please adjust the parameters.");
+        alert("错误: 输出尺寸无效！请调整参数。");
         return;
     }
     else if( (config.n + 2*config.p - config.k) % config.s != 0){
-        alert("WARNING: (Input Size + 2 * Padding - Kernel Size) is not divisible by Stride. The output size will be rounded down.");
+        alert("警告：(Input Size + 2 * Padding - Kernel Size)不能被Stride整除。输出将无法完全覆盖输入。");
     }
     state.o = out_size;
     state.padded = config.n + 2 * config.p;
@@ -58,7 +160,7 @@ function reset() {
     
     state.outX = 0;
     state.outY = 0;
-    document.getElementById('display').innerText = "Click on 'Next Step' or 'Auto Play' to start the calculation ...";
+    document.getElementById('display').innerText = "点击“单步执行”或“自动执行”开始计算...";
     state.is_start = false;
 }
 
@@ -66,15 +168,24 @@ function reset() {
 function Data(){
     state.kernel = [];
     state.padded_input = [];
+    const preset = document.getElementById('preset').value;
+    const pattern = document.getElementById('input_pattern').value;
     
     if (config.type === 0){
-        for(let r=0; r<config.k; r++){
-            let row = [];
-            for(let c=0; c<config.k; c++){
-                row.push(Math.floor(Math.random() * 5) + 1)
-            }
-            state.kernel.push(row);
+        if (preset !== "customize") {
+            config.k = 3;
+            state.kernel = JSON.parse(JSON.stringify(kernel_presets[preset]));
         }
+        else {
+            for(let r=0; r<config.k; r++){
+                let row = [];
+                for(let c=0; c<config.k; c++){
+                    row.push(Math.floor(Math.random() * 6) - 2);
+                }
+                state.kernel.push(row);
+            }
+        }
+
     }
     else if (config.type === 1) {
         for(let r=0; r<config.k; r++){
@@ -95,11 +206,24 @@ function Data(){
         }
     }
 
-    
+    let input_row = [];
+    if (pattern === 'random') {
+        for(let r=0; r<state.padded; r++){
+            let row = [];
+            for(let c=0; c<state.padded; c++){
+                row.push(Math.floor(Math.random() * 11));
+            }
+            input_row.push(row);
+        }
+    }
+    else {
+        config.n = 9;
+        input_row = JSON.parse(JSON.stringify(input_pattern[pattern]));
+    }
     for(let r=0; r<state.padded; r++){
         let row = [];
         for(let c=0; c<state.padded; c++){
-            if (
+            if ( 
                 r < config.p ||
                 r >= config.p + config.n ||
                 c < config.p ||
@@ -107,8 +231,8 @@ function Data(){
             ) {
                 row.push({value: 0, is_pad: true });
             }
-            else{
-                row.push({value: Math.floor(Math.random() * 11), is_pad: false });
+            else {
+                row.push({value: input_row[r - config.p][c - config.p], is_pad: false});
             }
         }
         state.padded_input.push(row);
@@ -132,6 +256,7 @@ function reset_output() {
 
 function Grid(grid_id, data, size){
     const grid = document.getElementById(grid_id);
+
     grid.innerHTML = ``;
     grid.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
     
@@ -147,11 +272,9 @@ function Grid(grid_id, data, size){
                 }
                 else {
                     cell.className = 'cell input_cell';
-                    let alpha = 0.5 + data[r][c].value / 20;
+                    let alpha = 0.2 + data[r][c].value / 12.5;
                     cell.style.opacity = alpha;
-                }
-                
- 
+                } 
             }
             else if (grid_id === 'grid_kernel') {
                 cell.innerText = data[r][c];
@@ -200,9 +323,9 @@ function next_step() {
     if (state.outY >= state.o){
         state.is_stop = true;
         stop();
-        document.getElementById('display').innerHTML = (`Calculation completed~~
+        document.getElementById('display').innerHTML = (`计算完成！🎉
             <br>
-            You can see how convolution extracts image features from the depth of colors.`)
+            通过颜色深浅，您可以直观地看到卷积核提取了哪些特征。`)
         document.querySelectorAll('.highlight').forEach(e => e.classList.remove('highlight'));
     }
 
@@ -231,13 +354,21 @@ function Conv(X, Y) {
             }
         }
     }
+    if (sum <= 0) {
+        sum = 0;
+    }
     state.output[state.outY][state.outX] = sum;
     document.getElementById(`grid_output-${state.outY}-${state.outX}`).innerText = sum;
-    document.getElementById('display').innerText = (`Output(${state.outX},${state.outY}) = ` + display.join(' + ') + ` = ${sum}`);
+    document.getElementById('display').innerText = (`Output(${state.outX},${state.outY}) = ReLU[` + display.join(' + ') + `] = ${sum}`);
 
-    let alpha  = 0.1 + sum / ((config.k ** 2) * 25);
+    let max = get_max();
+
+    let alpha  = 0.1 + (sum / max);
     if (alpha > 1) {
         alpha = 1;
+    }
+    else if (alpha < 0.05) {
+        alpha = 0.05;
     }
     document.getElementById(`grid_output-${state.outY}-${state.outX}`).style.opacity = alpha;
     
@@ -309,6 +440,18 @@ function Max(X, Y) {
     document.getElementById(`grid_output-${state.outY}-${state.outX}`).style.opacity = alpha;
 }
     
+function get_max() {
+    let sum = 0;
+    for(let r=0; r<config.k; r++){
+        for(let c=0; c<config.k; c++){
+            sum += state.kernel[r][c];
+        }
+    }
+    if (sum <= 0) {
+        sum = 1;
+    }
+    return sum * 20;
+}
 
 function auto_play() {
     if (state.is_start) {
@@ -320,9 +463,9 @@ function auto_play() {
             return;
         }
         state.is_start = true
-        document.getElementById('auto').innerText = "Pause";
+        document.getElementById('auto').innerText = "暂停";
         document.getElementById('auto').style.backgroundColor = "rgba(167, 41, 119, 0.73)";
-        state.timer = setInterval(next_step, 200);        
+        state.timer = setInterval(next_step, 100);        
     }
 }
 
@@ -330,6 +473,40 @@ function stop(){
     state.is_start = false;
     clearInterval(state.timer);
     state.timer = null;
-    document.getElementById('auto').innerText = "Auto Play";
+    document.getElementById('auto').innerText = "自动执行";
     document.getElementById('auto').style.backgroundColor = "rgba(0, 255, 0, 0.729)";
+}
+
+function Type() {
+    if (document.getElementById("type").value === '0') {
+        document.getElementById("preset").disabled = false;
+    }
+    else {
+        document.getElementById("preset").value = "customize";
+        document.getElementById("preset").disabled = true;
+        document.getElementById("kernel_size").disabled = false;
+    }
+    init();
+}
+
+function Preset() {
+    if (document.getElementById("preset").value === "customize") {
+        document.getElementById("kernel_size").disabled = false;
+    }
+    else {
+        document.getElementById("kernel_size").value = "3";
+        document.getElementById("kernel_size").disabled = true;
+    }
+    init();
+}
+
+function Pattern() {
+    if (document.getElementById("input_pattern").value === 'random') {
+        document.getElementById("input_size").disabled = false;
+    }
+    else {
+        document.getElementById("input_size").value = "9";
+        document.getElementById("input_size").disabled = true;
+    }
+    init();
 }

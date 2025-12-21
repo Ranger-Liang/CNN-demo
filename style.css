@@ -5,7 +5,7 @@ body {
     align-items: center;
     padding: 20px;
     color: black;
-    font-size: 20px;
+    font-size: 16px;
 }
 
 
@@ -14,14 +14,14 @@ body {
     padding: 15px;
     border-radius: 8px;
     display: flex;
-    gap: 20px;
+    gap: 10px;
     justify-content: center;
 }
 
 select, input {
     padding: 5px;
     border-radius: 4px;
-    width: 80px;
+    width: 50px;
 }
 
 button {
@@ -111,7 +111,7 @@ button {
 }
 
 .cell.input_cell{
-    background-color: rgba(125, 189, 226);
+    background-color: rgb(102, 180, 226);
 }
 
 .cell.padding_cell{
