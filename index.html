@@ -8,8 +8,8 @@
     <script src="main.js"></script>
     <!--    
     作品概念：CNN动态演示
-    知识点： 抽象化、模块化、分治范式
-    创新点：直观呈现数学运算
+    知识点： 抽象化、模块化、自动执行、分治范式
+    创新点：摒弃复杂的数学公式、直观呈现卷积的效果
     关于AI：
             编程阶段：
                 几乎未使用任何AIGC（除了vscode内置的Copilot偶尔会给我自动补全代码）
@@ -43,8 +43,8 @@
             <label>输入图案: </label>
             <select id="input_pattern" style="width: 85px;" onchange="Pattern()">
                 <option value="random" title="您可以自由设置输入大小！">随机噪声</option>
-                <option value="cat">鸭子🦆</option>
-                <option value="dog" selected>小狗🐱</option>
+                <option value="cat" selected>鸭子🦆</option>
+                <option value="dog">小狗🐱</option>
                 <option value="face" >笑脸:)</option>
                 <option value="heart">爱心❤️</option>
                 <option value="invader">像素怪兽👾</option>
@@ -60,7 +60,7 @@
         <div>
             <label>预设卷积核: </label>
                 <select id="preset" style="width: 85px;" onchange="Preset()">
-                <option value="customize" title="随机生成。您可以自由设置卷积核大小！">
+                <option value="customize" title="【随机生成】您可以自由设置卷积核大小！">
                     随机</option>
                 <option value="sobel-x" title="【垂直边缘检测】左正右负。用于检测图像中的垂直线条。">
                     垂直边缘(Vertical)</option>
